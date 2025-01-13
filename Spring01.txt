@@ -1,0 +1,228 @@
+Persona.java
+------------
+package com.springcrud01.Modelo;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
+public class Persona {
+	@Id
+	@Column(name = "idpersona",length = 11)
+	private int idpersona;
+
+	@Column(name = "paterno", length = 50)
+	private String paterno;
+
+	@Column(name = "materno", length = 50)
+	private String materno;
+
+	@Column(name = "nombres", length = 100)
+	private String nombres;
+
+	@Column(name = "edad", length = 3)
+	private String edad;
+
+	@Column(name = "sexo", length = 12)
+	private String sexo;
+
+	@Column(name = "celular", length = 9)
+	private String celular;
+
+	@Column(name = "direccion", length = 80)
+	private String direccion;
+
+	@Column(name = "distrito", length = 80)
+	private String distrito;
+
+	@Column(name = "correo", length = 100)
+	private String correo;
+
+	public Persona() {
+
+	}
+
+	public Persona(int idpersona, String paterno, String materno, String nombres, String edad, String sexo,
+			String celular, String direccion, String distrito, String correo) {
+		super();
+		this.idpersona = idpersona;
+		this.paterno = paterno;
+		this.materno = materno;
+		this.nombres = nombres;
+		this.edad = edad;
+		this.sexo = sexo;
+		this.celular = celular;
+		this.direccion = direccion;
+		this.distrito = distrito;
+		this.correo = correo;
+	}
+
+}
+
+InterfazPersona.java
+---------------------
+package com.springcrud01.Interfaces;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+import com.springcrud01.Modelo.Persona;
+
+@Repository
+public interface InterfazPersona extends CrudRepository<Persona,Integer> {
+
+}
+
+InterfazPersonaServicio.java
+----------------------------
+package com.springcrud01.InterfaceServicio;
+
+import java.util.List;
+
+import com.springcrud01.Modelo.Persona;
+
+public interface InterfazPersonaServicio {
+	
+	public List<Persona> Listado();
+	
+
+}
+
+PersonaServicio.java
+--------------------
+package com.springcrud01.Servicio;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.springcrud01.InterfaceServicio.InterfazPersonaServicio;
+import com.springcrud01.Interfaces.InterfazPersona;
+import com.springcrud01.Modelo.Persona;
+
+@Service
+public class PersonaServicio implements InterfazPersonaServicio{
+
+	@Autowired
+	private InterfazPersona data;
+	@Override
+	public List<Persona> Listado() {
+		return (List<Persona>)data.findAll();
+	}
+}
+
+pom.xml
+-------
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.1</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.spring01</groupId>
+	<artifactId>SpringCrud01</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>SpringCrud01</name>
+	<description>Crud con Spring Tool Suite 4</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+application.properties
+-----------------------
+spring.application.name=SpringCrud01
+spring.datasource.url=jdbc:mysql://localhost:3306/sistema01?serverTimezone=UTC
+spring.datasource.username=admin
+spring.datasource.password=1234
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.use_sql_comments=true
+
+mysql
+-----
+create database sistema01;
+
+use sistema01;
+
+CREATE TABLE persona (
+    idpersona INT AUTO_INCREMENT PRIMARY KEY,
+    paterno VARCHAR(50),
+    materno VARCHAR(50),
+    nombres VARCHAR(100),
+    edad VARCHAR(3),
+    sexo VARCHAR(12),
+    celular VARCHAR(9),
+    direccion VARCHAR(80),
+    distrito VARCHAR(80),
+    correo VARCHAR(100)
+);
+
+INSERT INTO persona (paterno, materno, nombres, edad, sexo, celular, direccion, distrito, correo) 
+VALUES 
+('Gonzalez', 'Perez', 'Juan Carlos', '30', 'Masculino', '987654321', 'Calle Los Robles 123', 'San Isidro', 'juan.perez@gmail.com'),
+('Fernandez', 'Lopez', 'Maria Fernanda', '28', 'Femenino', '998877665', 'Av. Las Palmeras 456', 'Miraflores', 'maria.lopez@hotmail.com'),
+('Ramirez', 'Garcia', 'Luis Alfredo', '35', 'Masculino', '987321654', 'Jr. Los Cedros 789', 'Surco', 'luis.ramirez@yahoo.com'),
+('Sanchez', 'Torres', 'Ana Sofia', '25', 'Femenino', '993344556', 'Calle Los Olivos 321', 'Barranco', 'ana.sanchez@gmail.com'),
+('Castro', 'Diaz', 'Carlos Eduardo', '40', 'Masculino', '999888777', 'Av. La Marina 654', 'La Molina', 'carlos.castro@hotmail.com');
+
+select * from persona;
+
+si tengo la cuenta: admin y password=1234
+
+
